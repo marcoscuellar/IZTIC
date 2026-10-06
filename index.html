@@ -1,0 +1,612 @@
+<title>IZTIC — Operated by OLLIN OS</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap">
+<style>
+  :root{
+    --navy:#072B58; --navy2:#0e3a63; --navy3:#0e3a63;
+    --brass:#5BA430; --brass2:#8ed15c;
+    --silver:#6E6F72; --silver2:#9aa3ad; --silverlt:#E5E8ED;
+    --ink:#20262e; --slate:#3f5876; --mist:#eef1f5; --line:#dbe1e9;
+    --bg:#181A1E; --panel:#202328; --panelline:#34373d;
+    --ctrl:#181A1E; --ctrlline:#3a3e45; --ctrlink:#f6f6f3; --label:#a9afb8;
+    --appaccent:#F7F7F3; --appbrass:#FFE04B; --shadow:0 22px 70px rgba(0,0,0,.28);
+    --serif:"Inter","Helvetica Neue",Arial,sans-serif; --sans:"Inter","Helvetica Neue",Arial,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#181A1E; --panel:#202328; --panelline:#34373d;
+      --ctrl:#181A1E; --ctrlline:#3a3e45; --ctrlink:#f6f6f3; --label:#a9afb8;
+      --appaccent:#F7F7F3; --appbrass:#FFE04B; --shadow:0 22px 70px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#181A1E; --panel:#202328; --panelline:#34373d;
+    --ctrl:#181A1E; --ctrlline:#3a3e45; --ctrlink:#f6f6f3; --label:#a9afb8;
+    --appaccent:#F7F7F3; --appbrass:#FFE04B; --shadow:0 22px 70px rgba(0,0,0,.4);
+  }
+  .logochip{ display:inline-flex; background:#fff; border-radius:8px; padding:8px 11px; align-items:center; }
+  .logochip img{ height:30px; display:block; }
+  .wordmark{ line-height:1; }
+  .wordmark .wm{ font-size:21px; letter-spacing:.8px; color:#fff; }
+  .wordmark .wm .spy{ font-weight:300; }
+  .wordmark .wm .glass{ font-weight:800; }
+  .wordmark .wmsub{ font-size:8px; letter-spacing:5px; color:#9aa3ad; margin-top:4px; font-weight:600; }
+  .sectors{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:0 40px 4px; }
+  .sectors .slab{ font-size:8px; text-transform:uppercase; letter-spacing:1.1px; color:var(--muted); font-weight:700; }
+  .sectors .stag{ font-size:9px; font-weight:700; color:var(--navy); background:var(--silvermist,#eef1f5); border:1px solid var(--line); border-radius:20px; padding:4px 10px; }
+
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:"Archivo",var(--sans); }
+
+  /* top strip */
+  .topbar{ background:#181A1E; color:#fff; padding:17px max(22px,calc((100vw - 1240px)/2)); display:flex; align-items:center; gap:13px; border-bottom:1px solid #303339; position:sticky; top:0; z-index:20; }
+  .topbar .bn{ font-family:var(--serif); font-size:19px; font-weight:700; letter-spacing:1px; }
+  .topbar .bn span{ color:var(--brass2); }
+  .topbar .tag{ margin-left:auto; font-size:10px; color:#8f949d; letter-spacing:2.2px; text-transform:uppercase; }
+  .ollinmark{ display:flex; flex-direction:column; line-height:1; }
+  .ollinmark .main{ font-size:20px; letter-spacing:1.5px; font-weight:800; color:#fff; }
+  .ollinmark .main i{ font-style:normal; font-weight:300; color:#a9afb8; }
+  .ollinmark .sub{ font-size:7px; letter-spacing:3.1px; color:#777d86; margin-top:5px; }
+  .modulechip{ margin-left:22px; padding-left:22px; border-left:1px solid #3a3e45; font-size:10px; font-weight:700; letter-spacing:1.2px; color:#FFE04B; text-transform:uppercase; }
+  .productmark{display:flex;flex-direction:column;line-height:1}.productmark .main{font-size:22px;font-weight:900;letter-spacing:2.2px;color:#fff}.productmark .sub{font-size:7px;letter-spacing:1.5px;color:#8f949d;margin-top:5px;text-transform:uppercase}.topnav{display:flex;gap:4px;margin-left:28px}.navbtn{border:0;background:transparent;color:#8f949d;font:700 9px "Archivo",sans-serif;letter-spacing:1px;text-transform:uppercase;padding:10px 11px;cursor:pointer}.navbtn.active{color:#181A1E;background:#FFE04B}.usagechip{margin-left:auto;border:1px solid #3a3e45;color:#f6f6f3;padding:8px 11px;font-size:9px;letter-spacing:.7px}.usagechip b{color:#FFE04B}
+  @media (max-width:640px){ .topbar .tag{ display:none; } }
+
+  .app{ display:grid; grid-template-columns:390px 1fr; gap:28px; max-width:1240px; margin:0 auto; padding:30px 16px 80px; align-items:start; }
+  .appview{display:none}.appview.active{display:block}.appview#createView.active{display:grid}.wideview{max-width:1240px;margin:0 auto;padding:42px 16px 80px;color:#f7f7f3}.viewhead{display:flex;justify-content:space-between;gap:20px;align-items:end;border-bottom:1px solid #34373d;padding-bottom:22px;margin-bottom:24px}.eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#FFE04B}.viewhead h1{font-size:44px;line-height:1;margin:8px 0 0;letter-spacing:-2px}.viewhead p{color:#8f949d;font-size:12px;max-width:420px;line-height:1.6;margin:0}.librarygrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.libcard{border:1px solid #34373d;background:#202328;padding:16px;min-height:190px;display:flex;flex-direction:column}.libpreview{height:78px;background:#181A1E;border:1px solid #34373d;padding:13px;margin-bottom:15px;position:relative;overflow:hidden}.libpreview:before{content:"";display:block;width:52%;height:8px;background:#FFE04B;margin-bottom:8px}.libpreview:after{content:"";display:block;width:82%;height:24px;border-top:2px solid #555b64;border-bottom:2px solid #34373d}.libmeta{font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:#FFE04B}.libcard h3{font-size:16px;margin:7px 0 5px}.libcard p{font-size:10px;color:#8f949d;margin:0 0 14px}.libactions{display:flex;gap:6px;margin-top:auto}.mini{border:1px solid #454950;background:transparent;color:#f6f6f3;font:700 8px Archivo;padding:8px;cursor:pointer}.mini.primary{background:#FFE04B;color:#181A1E;border-color:#FFE04B}.emptylib{grid-column:1/-1;border:1px dashed #454950;padding:70px 20px;text-align:center;color:#8f949d}.emptylib b{display:block;color:#f6f6f3;font-size:22px;margin-bottom:8px}.templategrid,.usagegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.panelcard{border:1px solid #34373d;background:#202328;padding:22px;min-height:210px}.panelcard.featured{border-color:#FFE04B}.panelcard .kicker{color:#FFE04B;font-size:8px;letter-spacing:1.5px;text-transform:uppercase}.panelcard h2{font-size:22px;margin:15px 0 8px}.panelcard p,.panelcard li{font-size:11px;line-height:1.6;color:#a9afb8}.panelcard ul{padding-left:17px}.bigstat{font-size:46px;font-weight:900;letter-spacing:-2px}.bigstat small{font-size:12px;color:#8f949d;letter-spacing:0}.statuspill{font-size:8px;text-transform:uppercase;letter-spacing:1px;color:#181A1E;background:#FFE04B;padding:4px 7px;display:inline-block}
+  .capturelayout{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(300px,.92fr);gap:18px}.capturecard,.inboxpanel{border:1px solid #34373d;background:#202328;padding:22px}.captureprompt{font-size:31px;line-height:1;letter-spacing:-1.4px;margin:5px 0 18px}.capturetextarea{width:100%;min-height:150px;resize:vertical;background:#181A1E;border:1px solid #454950;color:#f7f7f3;padding:16px;font:500 15px/1.55 Archivo,sans-serif;outline:none}.capturetextarea:focus{border-color:#FFE04B}.capturefields{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}.capturefields input,.capturefields select{width:100%;background:#181A1E;border:1px solid #454950;color:#f7f7f3;padding:11px;font:600 10px Archivo,sans-serif}.captureactions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.captureactions .btn{flex:0 1 auto;min-width:140px}.voicebtn.listening{background:#FFE04B;color:#181A1E}.truthnote{font-size:9px;color:#8f949d;line-height:1.5;margin-top:11px}.truthnote b{color:#FFE04B}.inboxhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.inboxhead h2{margin:0;font-size:18px}.capturelist{display:grid;gap:8px;max-height:520px;overflow:auto}.captureitem{border:1px solid #34373d;background:#181A1E;padding:13px}.captureitem .capmeta{font-size:7px;text-transform:uppercase;letter-spacing:1px;color:#FFE04B}.captureitem h3{font-size:12px;margin:7px 0 5px}.captureitem p{font-size:10px;line-height:1.5;color:#a9afb8;margin:0 0 9px}.captureitem .mini{margin-right:4px}.generatedpanel{display:none;border:1px solid #FFE04B;background:#181A1E;margin-top:14px;padding:14px}.generatedpanel.show{display:block}.generatedpanel textarea{width:100%;min-height:210px;background:transparent;border:0;border-top:1px solid #34373d;color:#f7f7f3;padding:13px 0 0;margin-top:10px;font:500 12px/1.6 Archivo,sans-serif;resize:vertical;outline:none}.generatedmeta{font-size:8px;text-transform:uppercase;letter-spacing:1.2px;color:#FFE04B}.mobilefab{display:none;position:fixed;right:18px;bottom:18px;z-index:40;border:0;background:#FFE04B;color:#181A1E;width:56px;height:56px;border-radius:50%;font:900 24px Archivo;box-shadow:0 12px 35px rgba(0,0,0,.45);cursor:pointer}
+  @media (max-width:860px){ .app,.appview#createView.active{ grid-template-columns:1fr; }.topnav{order:3;width:100%;margin:10px 0 0}.topbar{flex-wrap:wrap}.usagechip{margin-left:auto}.librarygrid,.templategrid,.usagegrid{grid-template-columns:1fr}.viewhead{align-items:start;flex-direction:column}.capturelayout{grid-template-columns:1fr}.mobilefab{display:block}.capturefields{grid-template-columns:1fr}.capturecard,.inboxpanel{padding:17px}.captureprompt{font-size:28px}.topbar{padding:13px 14px}.topnav{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;overflow:auto}.navbtn{padding:10px 4px;font-size:8px}.usagechip{font-size:8px}.wideview{padding-top:26px}.viewhead h1{font-size:36px}.editor{padding:18px 15px}.emptycanvas{min-height:520px;padding:28px}.emptyinner h2{font-size:38px} }
+
+  .editor{ background:var(--panel); border:1px solid var(--panelline); border-radius:0; padding:22px 20px; position:sticky; top:86px; box-shadow:var(--shadow); }
+  @media (max-width:860px){ .editor{ position:static; } }
+  .editor h1{ font-size:27px; line-height:1.02; letter-spacing:-1px; color:var(--appaccent); margin:0 0 8px; font-weight:800; }
+  .editor .hint{ font-size:11px; color:var(--label); margin:0 0 17px; line-height:1.55; }
+  .tip{ background:var(--ctrl); border:1px solid var(--ctrlline); border-radius:0; padding:12px; margin-bottom:17px; }
+  .tip b{ font-size:9px; text-transform:uppercase; letter-spacing:1.7px; color:var(--appbrass); display:block; margin-bottom:6px; }
+  .tip p{ font-size:10.5px; color:var(--label); line-height:1.5; margin:0; }
+  .fld{ margin-bottom:12px; }
+  .fld label{ display:block; font-size:9px; text-transform:uppercase; letter-spacing:1.4px; color:#8f949d; font-weight:700; margin-bottom:6px; }
+  .fld input,.fld textarea,.fld select{ width:100%; font-family:inherit; font-size:12px; color:var(--ctrlink); background:var(--ctrl); border:1px solid var(--ctrlline); border-radius:0; padding:10px 11px; outline:none; }
+  .fld input:focus,.fld textarea:focus,.fld select:focus{ border-color:var(--appbrass); box-shadow:0 0 0 1px var(--appbrass); }
+  .fld textarea{ resize:vertical; min-height:58px; line-height:1.45; }
+  .btnrow{ display:flex; gap:8px; margin-top:6px; }
+  .btn{ flex:1; font-family:inherit; font-size:11px; font-weight:800; cursor:pointer; border-radius:0; padding:12px; border:1px solid transparent; }
+  .btn.primary{ background:#FFE04B; color:#181A1E; }
+  .btn.ghost{ background:transparent; color:var(--appaccent); border-color:var(--ctrlline); }
+  .savednote{ font-size:10.5px; color:var(--label); text-align:center; margin-top:9px; min-height:13px; }
+  .modebar{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:14px; }
+  .modebtn{ border:1px solid var(--ctrlline); background:var(--ctrl); color:var(--label); border-radius:0; padding:9px; font:700 9px "Archivo",var(--sans); letter-spacing:.4px; cursor:pointer; }
+  .modebtn.active{ background:#f4f4f0; border-color:#f4f4f0; color:#181A1E; }
+  .analyze{ width:100%; border:0; border-radius:0; padding:13px; background:#FFE04B; color:#181A1E; font:800 11px "Archivo",var(--sans); cursor:pointer; margin:1px 0 14px; }
+  .decision{ border:1px solid #454950; border-left:3px solid #FFE04B; background:#181A1E; border-radius:0; padding:13px; margin-bottom:16px; display:none; }
+  .decision.show{ display:block; }
+  .decision h2{ font-size:9px; letter-spacing:1.6px; text-transform:uppercase; color:#FFE04B; margin:0 0 10px; }
+  .decisiongrid{ display:grid; gap:6px; }
+  .drow{ display:grid; grid-template-columns:62px 1fr; gap:7px; font-size:9.5px; line-height:1.4; }
+  .drow b{ color:#777d86; text-transform:uppercase; letter-spacing:1px; }
+  .drow span{ color:var(--label); }
+  .confidence{ display:inline-flex; align-items:center; gap:5px; margin-top:8px; font-size:9px; color:var(--label); }
+  .dot{ width:7px; height:7px; border-radius:50%; background:#FFE04B; box-shadow:0 0 0 4px rgba(255,224,75,.08); }
+  .ai-tag{ font-size:8px; color:var(--label); margin:-6px 0 10px; }
+  .brandsec{ border:1px solid var(--ctrlline); background:#181A1E; padding:13px; margin:0 0 16px; }
+  .brandhead{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:10px; }
+  .brandhead h2{ font-size:10px; color:#f6f6f3; margin:0 0 3px; letter-spacing:.3px; }
+  .brandhead p{ font-size:9px; color:#858b94; margin:0; line-height:1.4; }
+  .brandurl{ display:grid; grid-template-columns:1fr auto; gap:6px; margin-bottom:10px; }
+  .brandurl input{ min-width:0; font:500 11px "Archivo",sans-serif; color:#f6f6f3; background:#202328; border:1px solid #3a3e45; padding:9px; outline:none; }
+  .brandpull{ border:0; background:#f4f4f0; color:#181A1E; font:800 9px "Archivo",sans-serif; padding:0 11px; cursor:pointer; white-space:nowrap; }
+  .swatches{ display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
+  .swatch label{ display:block; font-size:7px; color:#777d86; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+  .swatch input[type=color]{ width:100%; height:30px; padding:2px; border:1px solid #3a3e45; background:#202328; cursor:pointer; }
+  .brandstatus{ font-size:8px; line-height:1.4; color:#8f949d; margin-top:8px; min-height:12px; }
+  .steps{ border-top:1px solid #34373d; margin-top:18px; }
+  .step{ border-bottom:1px solid #34373d; }
+  .step summary{ list-style:none; cursor:pointer; display:grid; grid-template-columns:30px 1fr auto auto; align-items:center; gap:9px; padding:14px 0; color:#f6f6f3; }
+  .step summary::-webkit-details-marker{ display:none; }
+  .stepno{ color:#FFE04B; font-size:9px; font-weight:800; letter-spacing:1px; }
+  .steptitle{ font-size:11px; font-weight:700; }
+  .stepmeta{ color:#747a83; font-size:8px; text-transform:uppercase; letter-spacing:1px; }
+  .step summary::after{ content:"+"; color:#FFE04B; font-size:16px; grid-column:4; grid-row:1; }
+  .step[open] summary::after{ content:"−"; }
+  .stepbody{ padding:2px 0 15px 39px; }
+  .step .brandsec{ margin:0; border:0; padding:0; background:transparent; }
+  .step .repsec{ border:0; margin:0; padding:0; }
+  .step .repttl{ display:none; }
+  .emptycanvas{ width:8.5in; max-width:100%; min-height:670px; background:#181A1E; border:1px solid #34373d; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; padding:48px; color:#f7f7f3; }
+  .emptyinner{ max-width:430px; text-align:center; }
+  .emptyeyebrow{ font-size:9px; color:#FFE04B; letter-spacing:2.4px; text-transform:uppercase; margin-bottom:18px; }
+  .emptyinner h2{ font-size:46px; line-height:.98; letter-spacing:-2.2px; margin:0 0 18px; }
+  .emptyinner h2 span{ background:#FFE04B; color:#181A1E; padding:0 7px 3px; }
+  .emptyinner p{ color:#a9afb8; font-size:13px; line-height:1.6; margin:0 auto 22px; max-width:360px; }
+  .emptyflow{ display:flex; justify-content:center; gap:7px; flex-wrap:wrap; }
+  .emptyflow span{ border:1px solid #3a3e45; color:#858b94; padding:7px 9px; font-size:8px; letter-spacing:.7px; text-transform:uppercase; }
+  .sheet.is-empty{ display:none; }
+  .emptycanvas.has-output{ display:none; }
+  .btn[disabled]{ opacity:.35; cursor:not-allowed; }
+
+  .stage{ display:flex; justify-content:center; }
+  .sheet{ width:8.5in; max-width:100%; background:var(--brand-bg,#fff); color:var(--brand-text,var(--ink)); box-shadow:var(--shadow); border-radius:5px; overflow:hidden; }
+  .sheet .scap,.sheet .shum,.sheet .repcard,.sheet .cc,.sheet .rcwrap{ background-color:var(--brand-bg,#fff); }
+  .sheet .sh{ background:linear-gradient(125deg,color-mix(in srgb,var(--navy) 82%,#000) 0%,var(--navy) 100%); }
+  .sheet .sdata{ background:color-mix(in srgb,var(--navy) 7%,var(--brand-bg,#fff)); }
+  .sheet .qt{ background:color-mix(in srgb,var(--brass) 13%,var(--brand-bg,#fff)); border-left-color:var(--brass); }
+  .sheet .ci svg{ stroke:var(--navy); }
+  .sheet .rcphoto svg circle,.sheet .rcphoto svg path{ fill:var(--brass); }
+  .sheet .rcphoto{ border-color:color-mix(in srgb,var(--brass) 18%,var(--brand-bg,#fff)); }
+
+  .sh{ background:linear-gradient(125deg,#04203f 0%,#072B58 52%,#0e3a63 100%); color:#fff; padding:34px 40px 30px; position:relative; overflow:hidden; }
+  .sh::after{ content:""; position:absolute; inset:0; background:linear-gradient(105deg,transparent 54%,rgba(154,163,173,.10) 54%); border-top:2px solid rgba(154,163,173,.35); }
+  .brandrow{ display:flex; align-items:center; gap:12px; position:relative; z-index:2; }
+  .bnm{ font-family:var(--serif); font-size:22px; font-weight:700; letter-spacing:1px; line-height:1; }
+  .bnm span{ display:block; font-size:8px; letter-spacing:4px; color:var(--brass2); margin-top:3px; font-family:var(--sans); font-weight:700; }
+  .bsb{ font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#aebbcf; margin-top:3px; display:none; }
+  .htag{ position:relative; z-index:2; margin-top:18px; max-width:5.4in; }
+  .htag h2{ font-family:var(--serif); font-size:21px; font-weight:700; line-height:1.2; margin:0; letter-spacing:-.2px; }
+  .htag h2 em{ color:var(--brass2); font-style:normal; }
+  .hook{ font-size:11px; color:#c9d4e3; margin:8px 0 0; line-height:1.5; }
+  .prep{ position:absolute; right:40px; top:34px; z-index:3; text-align:right; font-size:8px; letter-spacing:1.3px; text-transform:uppercase; color:#9fb0c8; }
+  .prep b{ display:block; font-family:var(--serif); color:#fff; font-size:14px; text-transform:none; letter-spacing:.3px; margin-top:3px; }
+
+  .kk{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .kk .no{ font-size:10px; font-weight:800; color:var(--brass); }
+  .kk h3{ font-family:var(--serif); font-size:14px; font-weight:700; color:var(--navy); letter-spacing:.2px; margin:0; }
+  .kk .rule{ flex:1; height:2px; background:var(--silverlt); position:relative; }
+  .kk .rule::before{ content:""; position:absolute; left:0; top:0; width:36px; height:2px; background:var(--navy); }
+
+  .sdata{ background:var(--mist); padding:20px 40px; }
+  .sg{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .st{ text-align:center; padding:4px; position:relative; }
+  .st+.st::before{ content:""; position:absolute; left:0; top:14%; height:72%; width:1px; background:var(--line); }
+  .st .num{ font-family:var(--serif); font-size:25px; font-weight:700; color:var(--navy); line-height:1; }
+  .st .num small{ font-size:13px; color:var(--brass); font-weight:700; }
+  .st .lab{ font-size:8px; color:var(--slate); margin-top:6px; line-height:1.35; text-transform:uppercase; letter-spacing:.3px; font-weight:600; }
+
+  .scap{ padding:24px 40px 18px; }
+  .cg{ display:grid; grid-template-columns:repeat(3,1fr); gap:9px 10px; }
+  .cc{ border:1px solid var(--line); border-radius:10px; padding:11px 11px; display:block; background:#fff; position:relative; }
+  .cc.hot{ border-color:var(--navy); box-shadow:0 0 0 1.5px var(--navy) inset; }
+  .cc.hidden-by-intel{ display:none; }
+  .cg.personalized{ grid-template-columns:repeat(var(--service-count,3),1fr); }
+  .cc.hot::after{ content:"BUILT FOR YOU"; position:absolute; top:9px; right:10px; font-size:6px; font-weight:800; letter-spacing:1px; color:var(--navy); }
+  .ci{ width:34px; height:34px; border-radius:8px; background:var(--silvermist,#eef1f5); display:flex; align-items:center; justify-content:center; margin-bottom:8px; }
+  .cc h4{ font-family:var(--serif); font-size:13px; color:var(--navy); font-weight:700; margin:0 0 3px; }
+  .cc p{ font-size:8.7px; color:var(--slate); line-height:1.4; margin:0; }
+
+  .sintel{ padding:22px 40px 14px; }
+  .iw{ background:var(--navy); border-radius:11px; padding:16px 18px; color:#fff; position:relative; overflow:hidden; }
+  .iw::after{ content:""; position:absolute; right:0; top:0; bottom:0; width:5px; background:linear-gradient(180deg,var(--silver2),var(--brass)); }
+  .iw .ih{ display:flex; align-items:center; gap:8px; margin-bottom:11px; }
+  .iw .ih .no{ font-size:10px; font-weight:800; color:var(--brass2); }
+  .iw .ih h3{ font-family:var(--serif); font-size:13px; font-weight:700; letter-spacing:.2px; margin:0; }
+  .bl{ display:grid; gap:8px; }
+  .b{ display:flex; gap:10px; align-items:flex-start; font-size:10px; color:#dbe3ee; line-height:1.45; }
+  .b .c{ width:15px; height:15px; border-radius:50%; background:rgba(201,162,75,.18); display:flex; align-items:center; justify-content:center; flex:0 0 auto; margin-top:1px; }
+
+  .shum{ padding:16px 40px 18px; display:grid; grid-template-columns:1.2fr 1fr; gap:18px; }
+  .shum .ld p{ font-size:9.5px; color:var(--slate); line-height:1.5; margin:0 0 9px; }
+  .shum .ld p b{ color:var(--navy); }
+  .pr{ display:flex; flex-wrap:wrap; gap:5px; }
+  .pill{ font-size:8.3px; font-weight:700; color:var(--navy); background:#fff; border:1px solid var(--line); border-radius:20px; padding:4px 9px; }
+  .qt{ background:#eef6e7; border-left:3px solid var(--brass); border-radius:10px; padding:13px 14px; display:flex; flex-direction:column; justify-content:center; }
+  .qt p{ font-family:var(--serif); font-size:11px; line-height:1.5; color:var(--navy); margin:0 0 8px; }
+  .qt .who{ font-size:8.5px; color:var(--navy); font-weight:700; }
+  .qt .who span{ display:block; color:var(--slate); font-weight:400; margin-top:1px; }
+
+  .sf{ background:var(--navy); color:#fff; padding:16px 40px; display:flex; align-items:center; justify-content:space-between; gap:12px; position:relative; overflow:hidden; }
+  .sf::after{ content:""; position:absolute; right:0; top:0; bottom:0; width:5px; background:linear-gradient(180deg,var(--silver2),var(--brass)); }
+  .sf .cta b{ font-family:var(--serif); font-size:13px; }
+
+  /* editor: rep section */
+  .repsec{ border-top:1px solid var(--panelline); margin-top:6px; padding-top:14px; }
+  .repttl{ font-family:var(--serif); font-size:13px; font-weight:700; color:var(--appaccent); margin-bottom:11px; }
+  .photorow{ display:flex; gap:11px; align-items:center; }
+  .photothumb{ width:54px; height:54px; border-radius:50%; background:var(--ctrl); border:1px solid var(--ctrlline); flex:0 0 auto; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .photothumb span{ font-size:8px; color:var(--label); text-align:center; padding:0 4px; }
+  .photothumb img{ width:100%; height:100%; object-fit:cover; }
+  .photobtns{ display:flex; flex-direction:column; gap:6px; }
+  .uploadbtn{ font-size:11px; font-weight:700; color:#fff; background:var(--brass); border-radius:7px; padding:7px 12px; cursor:pointer; text-align:center; }
+  .clearphoto{ font-family:inherit; font-size:10.5px; color:var(--label); background:transparent; border:1px solid var(--ctrlline); border-radius:7px; padding:5px 12px; cursor:pointer; }
+  .phint{ font-size:9.5px; color:var(--label); margin-top:6px; }
+
+  /* sheet: rep contact card */
+  .repcard{ padding:16px 40px 20px; }
+  .rcwrap{ display:flex; gap:16px; align-items:center; background:#fff; border:1px solid var(--line); border-radius:12px; padding:15px 17px; }
+  .rcphoto{ width:70px; height:70px; border-radius:50%; flex:0 0 auto; overflow:hidden; background:var(--mist); border:2px solid #eef6e7; display:flex; align-items:center; justify-content:center; }
+  .rcphoto img{ width:100%; height:100%; object-fit:cover; }
+  .rcphoto svg{ width:100%; height:100%; }
+  .rcmeta .rlbl{ font-size:8px; letter-spacing:1.4px; text-transform:uppercase; color:var(--appbrass); font-weight:700; }
+  .rcmeta h3{ font-family:var(--serif); font-size:16px; color:var(--navy); font-weight:700; margin:3px 0 1px; }
+  .rcmeta .rtitle{ font-size:9.5px; color:var(--slate); margin-bottom:8px; }
+  .rccontact{ display:flex; gap:20px; }
+  .rccontact .ci2{ font-size:7.5px; letter-spacing:1.2px; text-transform:uppercase; color:var(--label); font-weight:700; }
+  .rccontact .cv2{ font-family:var(--serif); font-size:12px; color:var(--navy); font-weight:700; margin-top:1px; }
+  .sf .cta p{ font-size:9px; color:#aebbcf; margin:2px 0 0; }
+  .ct{ display:flex; gap:18px; }
+  .ct .l{ font-size:7.5px; color:var(--brass2); letter-spacing:1.3px; text-transform:uppercase; }
+  .ct .v{ font-size:10.5px; color:#fff; font-weight:700; margin-top:2px; }
+
+  @media print{
+    @page{ size:8.5in 11in; margin:0; }
+    body{ background:#fff; }
+    .topbar,.editor{ display:none !important; }
+    .app{ display:block; max-width:none; margin:0; padding:0; }
+    .stage{ display:block; }
+    .sheet{ width:8.5in; box-shadow:none; border-radius:0; }
+  }
+</style>
+
+<div class="topbar">
+  <div class="productmark"><div class="main">IZTIC</div><div class="sub">Operated by ŌLLIN OS</div></div>
+  <nav class="topnav" aria-label="Product navigation"><button class="navbtn active" data-view="createView">Create</button><button class="navbtn" data-view="captureView">Capture</button><button class="navbtn" data-view="libraryView">Library</button><button class="navbtn" data-view="templatesView">Templates</button><button class="navbtn" data-view="usageView">Usage</button></nav>
+  <div class="usagechip"><b id="creditsTop">5</b> of 5 builds remaining</div>
+</div>
+
+<div class="app appview active" id="createView">
+  <div class="editor">
+    <h1>Raw intel.<br>Pristine content.</h1>
+    <p class="hint">A fresh IZTIC workspace, operated by OLLIN OS. Nothing is created until verified intelligence supports it.</p>
+
+    <div class="steps">
+      <details class="step">
+        <summary><span class="stepno">01</span><span class="steptitle">Account intelligence</span><span class="stepmeta">Start here</span></summary>
+        <div class="stepbody">
+          <div class="modebar"><button class="modebtn active" type="button" data-mode="standalone">Standalone intel</button><button class="modebtn" type="button" data-mode="engine5">Engine 5 payload</button></div>
+          <div class="tip"><b>Evidence first</b><p>Paste verified signals or an Engine 5 summary. Weak matches are suppressed.</p></div>
+          <div class="fld"><label for="client">Client / prospect name</label><input id="client" type="text" placeholder="Who is this for?" /></div>
+          <div class="fld"><label for="intel">Verified account intelligence</label><textarea id="intel" style="min-height:118px" placeholder="Hiring activity, expansion news, meeting notes, buyer pressure..."></textarea></div>
+          <button class="analyze" id="analyzeBtn" type="button">Analyze + create first draft</button><div class="ai-tag">A build is used only when a supported first draft is created.</div>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="stepno">02</span><span class="steptitle">Output brand</span><span class="stepmeta">User brand</span></summary>
+        <div class="stepbody"><div class="brandsec">
+          <div class="brandhead"><div><h2>Brand source</h2><p>This changes the collateral—not the IZTIC workspace.</p></div></div>
+          <div class="brandurl"><input id="website" type="url" placeholder="https://clientwebsite.com"><button class="brandpull" id="pullBrandBtn" type="button">Pull brand →</button></div>
+          <div class="swatches">
+            <div class="swatch"><label for="brandPrimary">Primary</label><input id="brandPrimary" type="color" value="#181A1E"></div><div class="swatch"><label for="brandAccent">Accent</label><input id="brandAccent" type="color" value="#FFE04B"></div><div class="swatch"><label for="brandBg">Canvas</label><input id="brandBg" type="color" value="#F7F7F3"></div><div class="swatch"><label for="brandText">Text</label><input id="brandText" type="color" value="#181A1E"></div>
+          </div>
+          <div class="brandstatus" id="brandStatus">IZTIC colors remain until an output brand is approved.</div>
+        </div></div>
+      </details>
+
+      <details class="step" id="messageStep">
+        <summary><span class="stepno">03</span><span class="steptitle">Message + relevance</span><span class="stepmeta">After analysis</span></summary>
+        <div class="stepbody">
+          <div class="decision" id="decision"><h2>IZTIC recommendation · OLLIN verified</h2><div class="decisiongrid"><div class="drow"><b>Pressure</b><span id="d-pressure"></span></div><div class="drow"><b>Show</b><span id="d-show"></span></div><div class="drow"><b>Suppress</b><span id="d-hide"></span></div><div class="drow"><b>Why</b><span id="d-why"></span></div></div><div class="confidence"><span class="dot"></span><span id="d-confidence"></span></div></div>
+          <div class="fld"><label for="hook">Opening message</label><textarea id="hook"></textarea></div><div class="ai-tag">Editable — human approval required.</div>
+          <div class="fld"><label for="focus">Capability to spotlight</label><select id="focus"><option value="none">No spotlight</option><option value="direct">Direct Hire</option><option value="contract">Contract &amp; Freelance</option><option value="payroll">Payrolling</option><option value="nearshore">Nearshore &amp; Onshore</option><option value="supplychain">Supply Chain Solutions</option><option value="consulting">Consulting</option></select></div>
+          <div class="fld"><label for="visible">Capabilities shown</label><select id="visible" multiple size="6"><option value="direct">Direct Hire</option><option value="contract">Contract &amp; Freelance</option><option value="payroll">Payrolling</option><option value="nearshore">Nearshore &amp; Onshore</option><option value="supplychain">Supply Chain Solutions</option><option value="consulting">Consulting</option></select></div>
+          <div class="fld"><label for="b1">Supporting point 1</label><input id="b1" type="text" /></div><div class="fld"><label for="b2">Supporting point 2</label><input id="b2" type="text" /></div><div class="fld"><label for="b3">Supporting point 3</label><input id="b3" type="text" /></div>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="stepno">04</span><span class="steptitle">Sender details</span><span class="stepmeta">Optional</span></summary>
+        <div class="stepbody"><div class="repsec"><div class="repttl">Your details</div>
+          <div class="fld"><label for="rname">Your name</label><input id="rname" type="text" placeholder="Your name" /></div><div class="fld"><label for="rtitle">Title</label><input id="rtitle" type="text" placeholder="Your title" /></div><div class="fld"><label for="rphone">Phone</label><input id="rphone" type="text" placeholder="Direct phone" /></div><div class="fld"><label for="remail">Email</label><input id="remail" type="text" placeholder="Email" /></div>
+          <div class="fld"><label for="rphoto">Your photo</label><div class="photorow"><div class="photothumb" id="photothumb"><span>No photo</span></div><div class="photobtns"><label class="uploadbtn">Upload photo<input id="rphoto" type="file" accept="image/*" hidden /></label><button type="button" class="clearphoto" id="clearphoto">Remove</button></div></div><div class="phint">Saved locally and included only in the export.</div></div>
+        </div></div>
+      </details>
+    </div>
+
+    <div class="btnrow">
+      <button class="btn primary" id="saveDraftBtn">Save draft</button>
+      <button class="btn ghost" id="printBtn">Approve + PDF</button>
+      <button class="btn ghost" id="resetBtn">Reset</button>
+    </div>
+    <div class="savednote" id="savednote"></div>
+  </div>
+
+  <div class="stage">
+    <div class="emptycanvas" id="emptyCanvas">
+      <div class="emptyinner"><div class="emptyeyebrow">IZTIC · Operated by OLLIN OS</div><h2>Nothing created.<br><span>Yet.</span></h2><p>Bring the raw intelligence. IZTIC will structure what matters, suppress what does not, and prepare the first draft for your approval.</p><div class="emptyflow"><span>01 Intelligence</span><span>02 Brand</span><span>03 Refine</span><span>04 Approve</span></div></div>
+    </div>
+    <div class="sheet is-empty">
+      <div class="sh">
+        <div class="brandrow"><div class="wordmark"><div class="wm"><span class="spy">SPY</span><span class="glass">GLASS</span></div><div class="wmsub">PARTNERS</div></div></div>
+        <div class="htag">
+          <h2>The right hire, in <em>days</em> — matched on <em>data</em>, placed by <em>people</em> who act like your own team.</h2>
+          <p class="hook" id="p-hook"></p>
+        </div>
+        <div class="prep">Prepared for<b id="p-client">Your Company</b></div>
+      </div>
+
+      <div class="sdata">
+        <div class="kk"><span class="no">01</span><h3>The Data Behind Every Match</h3><span class="rule"></span></div>
+        <div class="sg">
+          <div class="st"><div class="num">95<small>%</small></div><div class="lab">Min. skill match via Job Matrix</div></div>
+          <div class="st"><div class="num">24–48<small>hr</small></div><div class="lab">To first qualified candidate</div></div>
+          <div class="st"><div class="num">800<small>K+</small></div><div class="lab">Vetted candidate database</div></div>
+          <div class="st"><div class="num">20<small>+ yr</small></div><div class="lab">Global staffing experience</div></div>
+        </div>
+      </div>
+
+      <div class="scap">
+        <div class="kk"><span class="no">02</span><h3>What We Do</h3><span class="rule"></span></div>
+        <div class="cg">
+          <div class="cc" data-key="direct"><div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#072B58" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M17 11l2 2 4-4"/></svg></div><div><h4>Direct Hire</h4><p>Permanent placement matched at 95% by our Job Matrix — first candidate in 24–48 hours.</p></div></div>
+          <div class="cc" data-key="contract"><div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#072B58" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg></div><div><h4>Contract &amp; Freelance</h4><p>Contingent and freelance talent, scaled up or down as your workload shifts.</p></div></div>
+          <div class="cc" data-key="payroll"><div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#072B58" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg></div><div><h4>Payrolling</h4><p>We employ and pay the workers you source — you offload admin, compliance, and risk.</p></div></div>
+          <div class="cc" data-key="nearshore"><div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#072B58" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/></svg></div><div><h4>Nearshore &amp; Onshore</h4><p>US onshore and nearshore Mexico / LATAM teams working in your time zone.</p></div></div>
+          <div class="cc" data-key="supplychain"><div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#072B58" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="6.5" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg></div><div><h4>Supply Chain Solutions</h4><p>Specialist supply-chain talent and consulting — C-suite through the floor.</p></div></div>
+          <div class="cc" data-key="consulting"><div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#072B58" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg></div><div><h4>Consulting</h4><p>Workforce strategy, market-rate data, and org design from people who staff daily.</p></div></div>
+        </div>
+        <div class="sectors"><span class="slab">Sectors we serve</span><span class="stag">IT</span><span class="stag">Supply Chain</span><span class="stag">Sales</span><span class="stag">Finance &amp; Accounting</span></div>
+      </div>
+
+      <div class="sintel">
+        <div class="iw">
+          <div class="ih"><span class="no">03</span><h3 id="p-ih">Why Spyglass for You</h3></div>
+          <div class="bl" id="p-bl"></div>
+        </div>
+      </div>
+
+      <div class="shum">
+        <div class="ld">
+          <div class="kk"><span class="no">04</span><h3>The Humans Who Do It</h3><span class="rule"></span></div>
+          <p>Founded by brothers Rich &amp; Mike Parisi, Spyglass is <b>customer- and candidate-centric</b> — veteran recruiters averaging <b>20+ years</b> who act as an extension of your team.</p>
+          <div class="pr"><span class="pill">Relationship-first</span><span class="pill">Approachable &amp; practical</span><span class="pill">Integrity &amp; commitment</span></div>
+        </div>
+        <div class="qt"><p>Responsive, easy to work with, and the candidate quality is consistently there.</p><div class="who">HR &amp; Operations Leaders<span>Spyglass Partners clients</span></div></div>
+      </div>
+
+      <div class="repcard">
+        <div class="rcwrap">
+          <div class="rcphoto" id="p-rcphoto">
+            <svg viewBox="0 0 70 70" style="background:linear-gradient(160deg,#4a535b,#3C444C)"><circle cx="35" cy="27" r="12.5" fill="#8ed15c"/><path d="M12 66c0-13.5 10-22 23-22s23 8.5 23 22z" fill="#8ed15c"/></svg>
+          </div>
+          <div class="rcmeta">
+            <div class="rlbl">Your Spyglass contact</div>
+            <h3 id="p-rname">Your Name</h3>
+            <div class="rtitle" id="p-rtitle">Business Development</div>
+            <div class="rccontact">
+              <div><div class="ci2">Direct</div><div class="cv2" id="p-rphone">855.978.6841</div></div>
+              <div><div class="ci2">Email</div><div class="cv2" id="p-remail">info@spyglasspartners.com</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sf">
+        <div class="cta"><b id="p-cta">Let's fill your next hard role.</b><p>Send the job description — first qualified candidate back in 24–48 hours.</p></div>
+        <div class="ct"><div><div class="l">Call</div><div class="v">855.978.6841</div></div><div><div class="l">Email</div><div class="v">info@spyglasspartners.com</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="appview wideview" id="captureView">
+  <div class="viewhead"><div><div class="eyebrow">Mobile capture</div><h1>What are you thinking?</h1></div><p>Catch the thought now. IZTIC can organize it, connect it to an account, and turn it into client or social content when you are ready.</p></div>
+  <div class="capturelayout">
+    <article class="capturecard">
+      <div class="eyebrow">Quick capture</div><h2 class="captureprompt">Drop it here.<br>Structure comes next.</h2>
+      <textarea class="capturetextarea" id="captureText" placeholder="Example: This client is opening three locations next year. We should create something around rapid hiring and payroll."></textarea>
+      <div class="capturefields">
+        <input id="captureAccount" type="text" placeholder="Client / account (optional)">
+        <select id="captureTruth"><option value="idea">Personal idea</option><option value="conversation">Conversation note</option><option value="signal">Unverified signal</option><option value="verified">Verified intelligence</option></select>
+        <select id="captureOutput"><option value="save">Save to Ideas Inbox</option><option value="social">Create social post</option><option value="email">Create client email</option><option value="leavebehind">Start client leave-behind</option></select>
+        <select id="captureChannel"><option value="linkedin">LinkedIn</option><option value="general">General social</option><option value="email">Email</option></select>
+      </div>
+      <div class="captureactions"><button class="btn primary" id="captureBtn" type="button">Save capture</button><button class="btn ghost voicebtn" id="voiceBtn" type="button">Speak it</button></div>
+      <div class="truthnote"><b>Clarity rule:</b> Ideas and signals stay labeled. Only verified intelligence can be presented as a confirmed fact.</div>
+      <div class="generatedpanel" id="generatedPanel"><div class="generatedmeta" id="generatedMeta">Draft created</div><textarea id="generatedText"></textarea><div class="captureactions"><button class="mini primary" id="saveGeneratedBtn" type="button">Save to Library</button><button class="mini" id="copyGeneratedBtn" type="button">Copy</button><button class="mini" id="emailGeneratedBtn" type="button">Open email</button></div></div>
+    </article>
+    <aside class="inboxpanel"><div class="inboxhead"><h2>Ideas Inbox</h2><span class="statuspill" id="captureCount">0 saved</span></div><div class="capturelist" id="captureList"></div></aside>
+  </div>
+</section>
+
+<section class="appview wideview" id="libraryView"><div class="viewhead"><div><div class="eyebrow">Your work</div><h1>Content Library</h1></div><p>Every saved asset stays editable. Revisions and exports never use another build.</p></div><div class="librarygrid" id="libraryGrid"></div></section>
+
+<section class="appview wideview" id="templatesView"><div class="viewhead"><div><div class="eyebrow">Flexible blueprints</div><h1>Templates</h1></div><p>Templates guide the structure. IZTIC still decides which sections belong in each piece.</p></div><div class="templategrid"><article class="panelcard featured"><span class="statuspill">Available now</span><h2>Adaptive leave-behind</h2><p>Changes emphasis, length, and visible sections according to the account intelligence.</p><ul><li>Required opening and next step</li><li>Evidence-backed capabilities only</li><li>Optional proof, team, and contact sections</li></ul></article><article class="panelcard featured"><span class="statuspill">Available now</span><h2>Social perspective</h2><p>Turns a captured observation into a human social draft without presenting unverified ideas as facts.</p><ul><li>Hook, point of view, and close</li><li>Account names remain optional</li><li>Source label stays attached</li></ul></article><article class="panelcard featured"><span class="statuspill">Available now</span><h2>Client email</h2><p>Builds a concise, contextual email from the capture and keeps the final send decision with the user.</p></article></div></section>
+
+<section class="appview wideview" id="usageView"><div class="viewhead"><div><div class="eyebrow">Plan and credits</div><h1>Usage</h1></div><p>$20 monthly includes five intelligence-backed builds. Existing work always remains available.</p></div><div class="usagegrid"><article class="panelcard featured"><div class="kicker">Current plan</div><h2>IZTIC Monthly</h2><div class="bigstat">$20<small> / month</small></div><ul><li>5 new intelligence-backed builds</li><li>Unlimited revisions and exports</li><li>Brand extraction and Content Library</li></ul></article><article class="panelcard"><div class="kicker">This cycle</div><h2>Builds remaining</h2><div class="bigstat" id="creditsLarge">5<small> of 5</small></div><p>A credit is used only after a supported first draft is successfully created.</p></article><article class="panelcard"><div class="kicker">Need more</div><h2>Additional builds</h2><p>1 build · $3<br>5 builds · $10<br>15 builds · $25</p><button class="mini primary" type="button" disabled>Purchasing connects at launch</button></article></div></section>
+
+<button class="mobilefab" id="mobileCapture" type="button" aria-label="Capture an idea">+</button>
+
+<script>
+(function(){
+  function d(id){return document.getElementById(id);}
+  var KEY="iztic_workspace_v1", LIBRARY_KEY="iztic_library_v1", USAGE_KEY="iztic_usage_v1", CAPTURE_KEY="iztic_captures_v1";
+  var els={website:d('website'),brandPrimary:d('brandPrimary'),brandAccent:d('brandAccent'),brandBg:d('brandBg'),brandText:d('brandText'),client:d('client'),intel:d('intel'),hook:d('hook'),focus:d('focus'),visible:d('visible'),b1:d('b1'),b2:d('b2'),b3:d('b3'),rname:d('rname'),rtitle:d('rtitle'),rphone:d('rphone'),remail:d('remail')};
+  var o={sheet:document.querySelector('.sheet'),brandStatus:d('brandStatus'),client:d('p-client'),hook:d('p-hook'),ih:d('p-ih'),bl:d('p-bl'),cta:d('p-cta'),rname:d('p-rname'),rtitle:d('p-rtitle'),rphone:d('p-rphone'),remail:d('p-remail'),rcphoto:d('p-rcphoto'),thumb:d('photothumb')};
+  var note=d('savednote');
+  var photoData="";
+  var defaultAvatar='<svg viewBox="0 0 70 70" style="background:linear-gradient(160deg,#4a535b,#3C444C)"><circle cx="35" cy="27" r="12.5" fill="#8ed15c"/><path d="M12 66c0-13.5 10-22 23-22s23 8.5 23 22z" fill="#8ed15c"/></svg>';
+  /* Claude Code integration contract: keep brand state in this one object shape. */
+  var OLLIN_BRAND={website:"",brandPrimary:"#181A1E",brandAccent:"#FFE04B",brandBg:"#F7F7F3",brandText:"#181A1E"};
+  var BLANK={website:"",brandPrimary:OLLIN_BRAND.brandPrimary,brandAccent:OLLIN_BRAND.brandAccent,brandBg:OLLIN_BRAND.brandBg,brandText:OLLIN_BRAND.brandText,client:"",intel:"",hook:"",focus:"none",b1:"",b2:"",b3:"",rname:"",rtitle:"",rphone:"",remail:""};
+  var LABELS={direct:"Direct Hire",contract:"Contract & Freelance",payroll:"Payrolling",nearshore:"Nearshore & Onshore",supplychain:"Supply Chain Solutions",consulting:"Consulting"};
+  var lastDecision=null;
+  var currentProjectId=null;
+  var usage=loadJSON(USAGE_KEY,{included:5,used:0,bonus:0});
+  var library=loadJSON(LIBRARY_KEY,[]);
+  var captures=loadJSON(CAPTURE_KEY,[]);
+  var generatedDraft=null;
+  function loadJSON(key,fallback){try{return JSON.parse(localStorage.getItem(key))||fallback;}catch(e){return fallback;}}
+  function remainingCredits(){return Math.max(0,(usage.included||5)+(usage.bonus||0)-(usage.used||0));}
+  function renderUsage(){var remaining=remainingCredits();d('creditsTop').textContent=remaining;d('creditsLarge').innerHTML=remaining+'<small> of '+((usage.included||5)+(usage.bonus||0))+'</small>';}
+  function snapshot(status){return {id:currentProjectId||('iztic_'+Date.now()),title:((els.client.value||'Untitled account').trim()+' · Leave-behind'),client:(els.client.value||'Untitled account').trim(),type:'Adaptive leave-behind',status:status||'Draft',updatedAt:new Date().toISOString(),intel:els.intel.value,decision:lastDecision,brand:{website:els.website.value,brandPrimary:els.brandPrimary.value,brandAccent:els.brandAccent.value,brandBg:els.brandBg.value,brandText:els.brandText.value},copy:{hook:els.hook.value,b1:els.b1.value,b2:els.b2.value,b3:els.b3.value,focus:els.focus.value,visible:Array.from(els.visible.options).filter(function(x){return x.selected;}).map(function(x){return x.value})},sender:{name:els.rname.value,title:els.rtitle.value,phone:els.rphone.value,email:els.remail.value}};}
+  function persistProject(status){if(!lastDecision||!lastDecision.show||!lastDecision.show.length){note.textContent='Create a supported draft before saving it.';return false;}var item=snapshot(status);currentProjectId=item.id;var at=library.findIndex(function(x){return x.id===item.id;});if(at>=0)library[at]=item;else library.unshift(item);localStorage.setItem(LIBRARY_KEY,JSON.stringify(library));renderLibrary();note.textContent=status==='Approved'?'Approved and saved to Library':'Draft saved to Library';save();return true;}
+  function renderLibrary(){var grid=d('libraryGrid');if(!library.length){grid.innerHTML='<div class="emptylib"><b>No content yet.</b>Your first supported draft will appear here—fully editable.</div>';return;}grid.innerHTML=library.map(function(item){return '<article class="libcard"><div class="libpreview"></div><div class="libmeta">'+esc(item.status)+' · '+esc(item.type)+'</div><h3>'+esc(item.title)+'</h3><p>Updated '+new Date(item.updatedAt).toLocaleDateString()+'</p><div class="libactions"><button class="mini primary" data-open="'+item.id+'">Open</button><button class="mini" data-duplicate="'+item.id+'">Duplicate</button></div></article>';}).join('');}
+  function loadProject(id,duplicate){var item=library.find(function(x){return x.id===id;});if(!item)return;if(item.body){generatedDraft={id:duplicate?null:item.id,type:item.type,account:item.client||'',truth:item.truth||'idea',text:item.body};d('generatedText').value=item.body;d('generatedMeta').textContent=item.type+' · '+truthLabel(item.truth||'idea');d('generatedPanel').classList.add('show');d('captureAccount').value=item.client||'';showView('captureView');return;}currentProjectId=duplicate?null:item.id;els.client.value=item.client||'';els.intel.value=item.intel||'';lastDecision=item.decision||null;Object.keys(item.brand||{}).forEach(function(k){if(els[k])els[k].value=item.brand[k]});Object.keys(item.copy||{}).forEach(function(k){if(k==='visible')setVisible(item.copy[k]||[]);else if(els[k])els[k].value=item.copy[k]});Object.keys(item.sender||{}).forEach(function(k){var map={name:'rname',title:'rtitle',phone:'rphone',email:'remail'};if(els[map[k]])els[map[k]].value=item.sender[k]||''});showView('createView');updateCanvasState();render();if(lastDecision)d('decision').classList.add('show');note.textContent=duplicate?'Copy opened as a new unsaved project':'Project opened';}
+  function showView(id){document.querySelectorAll('.appview').forEach(function(v){v.classList.toggle('active',v.id===id)});document.querySelectorAll('.navbtn').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-view')===id)});if(id==='libraryView')renderLibrary();}
+  function esc(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+  function chk(){return '<span class="c"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#5BA430" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>';}
+  function truthLabel(value){return {idea:'Personal idea',conversation:'Conversation note',signal:'Unverified signal',verified:'Verified intelligence'}[value]||'Personal idea';}
+  function renderCaptures(){var list=d('captureList');d('captureCount').textContent=captures.length+' saved';if(!captures.length){list.innerHTML='<div class="emptylib" style="padding:45px 15px"><b>Nothing waiting.</b>Capture the thought before deciding where it belongs.</div>';return;}list.innerHTML=captures.map(function(item){return '<article class="captureitem"><div class="capmeta">'+esc(truthLabel(item.truth))+' · '+new Date(item.createdAt).toLocaleDateString()+'</div><h3>'+esc(item.account||'Ideas Inbox')+'</h3><p>'+esc(item.text)+'</p><button class="mini primary" data-use-capture="'+item.id+'">Create from this</button></article>';}).join('');}
+  function buildCaptureOutput(item,output){var account=item.account||'your audience';var thought=item.text.trim();var caution=item.truth==='verified'?'':'This began as '+truthLabel(item.truth).toLowerCase()+', so verify the underlying details before publishing.';if(output==='social'){return {type:'Social post',text:'The best content often starts as a note you almost forgot to save.\n\n'+thought+'\n\nThe opportunity is not to add more noise. It is to understand what this could mean for '+account+', verify what is true, and turn the useful part into something people can act on.\n\nRaw intelligence is only valuable when it becomes clear enough to use.'+(caution?'\n\nDraft note: '+caution:'')};}if(output==='email'){return {type:'Client email',text:'Subject: A thought for '+account+'\n\nHi,\n\nI was thinking about what is ahead for '+account+': '+thought+'\n\nIf that direction is accurate, there may be a practical opportunity to prepare now rather than react later. I would be glad to compare notes and turn it into a focused plan.\n\nWould a short conversation this week be useful?'+(caution?'\n\nInternal review note: '+caution:'')};}return null;}
+  function saveCapture(){var textValue=d('captureText').value.trim();if(!textValue){d('captureText').focus();return;}var item={id:'capture_'+Date.now(),text:textValue,account:d('captureAccount').value.trim(),truth:d('captureTruth').value,createdAt:new Date().toISOString()};captures.unshift(item);localStorage.setItem(CAPTURE_KEY,JSON.stringify(captures));renderCaptures();var output=d('captureOutput').value;if(output==='leavebehind'){els.client.value=item.account;els.intel.value=(item.truth==='verified'?'Verified intelligence: ':'Capture requiring verification: ')+item.text;showView('createView');document.querySelector('.step').open=true;note.textContent=item.truth==='verified'?'Verified capture added. Review, then analyze.':'Capture added as unverified context. Verify it before analysis.';}else if(output==='social'||output==='email'){generatedDraft=Object.assign({id:null,account:item.account,truth:item.truth},buildCaptureOutput(item,output));d('generatedText').value=generatedDraft.text;d('generatedMeta').textContent=generatedDraft.type+' · '+truthLabel(item.truth);d('generatedPanel').classList.add('show');}else{d('generatedPanel').classList.remove('show');}d('captureText').value='';d('captureBtn').textContent='Captured';setTimeout(function(){d('captureBtn').textContent='Save capture';},900);}
+  function saveGenerated(){if(!generatedDraft)return;var body=d('generatedText').value.trim();if(!body)return;var item={id:generatedDraft.id||('content_'+Date.now()),title:(generatedDraft.account||'Untitled')+' · '+generatedDraft.type,client:generatedDraft.account||'',type:generatedDraft.type,status:'Draft',truth:generatedDraft.truth,body:body,updatedAt:new Date().toISOString()};var at=library.findIndex(function(x){return x.id===item.id;});if(at>=0)library[at]=item;else library.unshift(item);generatedDraft.id=item.id;localStorage.setItem(LIBRARY_KEY,JSON.stringify(library));renderLibrary();d('generatedMeta').textContent=item.type+' · Saved to Library';}
+  function useCapture(id){var item=captures.find(function(x){return x.id===id;});if(!item)return;d('captureText').value=item.text;d('captureAccount').value=item.account||'';d('captureTruth').value=item.truth||'idea';d('captureOutput').value='social';window.scrollTo({top:0,behavior:'smooth'});}
+  function startVoice(){var SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){d('voiceBtn').textContent='Voice unavailable';return;}var rec=new SpeechRecognition();rec.lang='en-US';rec.interimResults=false;d('voiceBtn').classList.add('listening');d('voiceBtn').textContent='Listening…';rec.onresult=function(e){var spoken=e.results[0][0].transcript;d('captureText').value=(d('captureText').value+' '+spoken).trim();};rec.onend=function(){d('voiceBtn').classList.remove('listening');d('voiceBtn').textContent='Speak it';};rec.onerror=rec.onend;rec.start();}
+  function renderPhoto(){
+    if(photoData){
+      o.rcphoto.innerHTML='<img src="'+photoData+'" alt="">';
+      o.thumb.innerHTML='<img src="'+photoData+'" alt="">';
+    }else{
+      o.rcphoto.innerHTML=defaultAvatar;
+      o.thumb.innerHTML='<span>No photo</span>';
+    }
+  }
+  function applyBrand(){
+    var primary=els.brandPrimary.value||OLLIN_BRAND.brandPrimary;
+    var accent=els.brandAccent.value||OLLIN_BRAND.brandAccent;
+    var bg=els.brandBg.value||OLLIN_BRAND.brandBg;
+    var ink=els.brandText.value||OLLIN_BRAND.brandText;
+    o.sheet.style.setProperty('--navy',primary);
+    o.sheet.style.setProperty('--navy2',primary);
+    o.sheet.style.setProperty('--navy3',primary);
+    o.sheet.style.setProperty('--brass',accent);
+    o.sheet.style.setProperty('--brass2',accent);
+    o.sheet.style.setProperty('--brand-bg',bg);
+    o.sheet.style.setProperty('--brand-text',ink);
+    o.sheet.style.setProperty('--ink',ink);
+  }
+  function normalizeWebsite(value){
+    var raw=(value||'').trim();
+    if(!raw)return '';
+    return /^https?:\/\//i.test(raw)?raw:'https://'+raw;
+  }
+  function setBrand(brand,message){
+    ['brandPrimary','brandAccent','brandBg','brandText'].forEach(function(k){if(brand[k])els[k].value=brand[k];});
+    applyBrand();render();o.brandStatus.textContent=message;
+  }
+  function chooseWebsiteColors(html){
+    var theme=(html.match(/name=["']theme-color["'][^>]*content=["'](#[0-9a-f]{6})/i)||html.match(/content=["'](#[0-9a-f]{6})["'][^>]*name=["']theme-color/i)||[])[1];
+    var colors=(html.match(/#[0-9a-fA-F]{6}\b/g)||[]).map(function(x){return x.toUpperCase();});
+    var count={};colors.forEach(function(x){count[x]=(count[x]||0)+1;});
+    var ranked=Object.keys(count).filter(function(x){return !['#FFFFFF','#000000','#F7F7F7','#FAFAFA'].includes(x);}).sort(function(a,b){return count[b]-count[a];});
+    if(!theme&&!ranked.length)return null;
+    return {brandPrimary:(theme||ranked[0]||OLLIN_BRAND.brandPrimary).toUpperCase(),brandAccent:ranked.find(function(x){return x!==(theme||'').toUpperCase();})||OLLIN_BRAND.brandAccent,brandBg:'#F7F7F3',brandText:'#181A1E'};
+  }
+  async function requestBrandExtraction(url){
+    /* Backend handoff: Claude Code can replace this fetch with POST /api/brand/extract. */
+    var host=new URL(url).hostname.replace(/^www\./,'');
+    if(host==='ollinos.com')return Object.assign({},OLLIN_BRAND);
+    if(host.indexOf('spyglasspartners')>=0)return {brandPrimary:'#072B58',brandAccent:'#5BA430',brandBg:'#FFFFFF',brandText:'#20262E'};
+    try{
+      var response=await fetch(url,{method:'GET',mode:'cors'});
+      if(!response.ok)throw new Error('scan_failed');
+      return chooseWebsiteColors(await response.text());
+    }catch(e){return null;}
+  }
+  async function pullBrand(){
+    var url=normalizeWebsite(els.website.value);
+    if(!url){o.brandStatus.textContent='Enter a website, or use the color controls manually.';return;}
+    els.website.value=url;o.brandStatus.textContent='Scanning the website for brand signals…';d('pullBrandBtn').disabled=true;
+    var brand=await requestBrandExtraction(url);
+    d('pullBrandBtn').disabled=false;
+    if(brand)setBrand(brand,'Brand proposal loaded. Review and approve the colors before export.');
+    else{o.brandStatus.textContent='This site blocks browser scanning. Manual colors still work; the production OLLIN connector will scan it server-side.';save();}
+  }
+  function render(){
+    applyBrand();
+    var n=(els.client.value||"").trim();
+    o.client.textContent=n||"Your Company";
+    o.hook.textContent=(els.hook.value||"").trim();
+    o.hook.style.display=o.hook.textContent?"block":"none";
+    o.ih.textContent=n?("Why Spyglass for "+n):"Why Spyglass for You";
+    o.cta.textContent=n?("Let's fill "+n+"'s next hard role."):"Let's fill your next hard role.";
+    var selected=Array.from(els.visible.options).filter(function(x){return x.selected;}).map(function(x){return x.value;});
+    if(!selected.length && !lastDecision) selected=Object.keys(LABELS);
+    document.querySelectorAll('.cc').forEach(function(c){var k=c.getAttribute('data-key');c.classList.toggle('hot',k===els.focus.value);c.classList.toggle('hidden-by-intel',selected.indexOf(k)<0);});
+    var grid=document.querySelector('.cg');grid.classList.toggle('personalized',selected.length<6);grid.style.setProperty('--service-count',Math.min(3,Math.max(1,selected.length)));
+    var a=[els.b1.value,els.b2.value,els.b3.value].map(function(s){return (s||"").trim();}).filter(Boolean);
+    if(!a.length) a=["Add 1–3 points on why Spyglass fits this client…"];
+    o.bl.innerHTML=a.map(function(t){return '<div class="b">'+chk()+'<span>'+esc(t)+'</span></div>';}).join('');
+    o.rname.textContent=(els.rname.value||"").trim()||"Your Name";
+    o.rtitle.textContent=(els.rtitle.value||"").trim()||"Business Development";
+    o.rphone.textContent=(els.rphone.value||"").trim()||"855.978.6841";
+    o.remail.textContent=(els.remail.value||"").trim()||"info@spyglasspartners.com";
+    save();
+  }
+  function updateCanvasState(){
+    var created=!!(lastDecision&&lastDecision.show&&lastDecision.show.length);
+    o.sheet.classList.toggle('is-empty',!created);
+    d('emptyCanvas').classList.toggle('has-output',created);
+    d('printBtn').disabled=!created;
+    d('saveDraftBtn').disabled=!created;
+  }
+  function has(text,words){return words.some(function(w){return text.indexOf(w)>=0;});}
+  function setVisible(keys){Array.from(els.visible.options).forEach(function(o){o.selected=keys.indexOf(o.value)>=0;});}
+  function analyze(){
+    var t=((els.client.value||'')+' '+(els.intel.value||'')).toLowerCase();
+    if(!(els.intel.value||'').trim()){
+      note.textContent='Add verified intelligence before creating collateral.';
+      document.querySelector('.step').open=true;
+      return;
+    }
+    var scores={direct:0,contract:0,payroll:0,nearshore:0,supplychain:0,consulting:0};
+    var reasons=[];
+    if(has(t,['permanent','leadership','director','executive','full-time','full time','critical hire'])){scores.direct+=4;reasons.push('long-term or leadership hiring');}
+    if(has(t,['contract','project','seasonal','peak','temporary','freelance','implementation','backlog'])){scores.contract+=4;reasons.push('variable or project-based demand');}
+    if(has(t,['payroll','timecard','time card','compliance','workers you source','1099','employer of record'])){scores.payroll+=5;reasons.push('worker administration or compliance pressure');}
+    if(has(t,['nearshore','latam','mexico','time zone','cost pressure','offshore','distributed team'])){scores.nearshore+=5;reasons.push('distributed-team or cost needs');}
+    if(has(t,['supply chain','distribution','warehouse','logistics','procurement','inventory','manufacturing','planning'])){scores.supplychain+=6;reasons.push('supply-chain or distribution growth');}
+    if(has(t,['strategy','workforce plan','market rate','org design','transformation','restructure','advisory'])){scores.consulting+=5;reasons.push('workforce planning or transformation');}
+    if(has(t,['hiring','roles','jobs','talent','expansion','growth'])){scores.direct+=1;scores.contract+=1;}
+    var ranked=Object.keys(scores).sort(function(a,b){return scores[b]-scores[a];});
+    var chosen=ranked.filter(function(k){return scores[k]>=3;}).slice(0,3);
+    if(!chosen.length){chosen=[];}
+    var primary=chosen[0]||'none';
+    els.focus.value=primary;
+    setVisible(chosen);
+    var n=(els.client.value||'Your team').trim();
+    var pressure=reasons.length?reasons.slice(0,2).join(' plus '):'No strong business pressure is supported by the current evidence';
+    if(chosen.length){
+      var lead=LABELS[primary];
+      els.hook.value=n+' is navigating '+pressure+' — the right staffing approach should match that reality, not force a generic solution.';
+      els.b1.value=lead+' support tied directly to the signals behind '+n+"'s current needs.";
+      els.b2.value=chosen.length>1?LABELS[chosen[1]]+' adds flexibility without distracting from the primary need.':'95% skill matching keeps the search aligned to the work, not just the title.';
+      els.b3.value='A first qualified candidate in 24–48 hours helps convert the current signal into action.';
+    }else{
+      els.hook.value='';els.b1.value='';els.b2.value='';els.b3.value='';
+    }
+    var hidden=Object.keys(LABELS).filter(function(k){return chosen.indexOf(k)<0;});
+    d('d-pressure').textContent=pressure;
+    d('d-show').textContent=chosen.length?chosen.map(function(k){return LABELS[k];}).join(', '):'Nothing yet — more verified intelligence needed';
+    d('d-hide').textContent=hidden.map(function(k){return LABELS[k];}).join(', ');
+    d('d-why').textContent=chosen.length?'These services have direct support in the supplied intelligence. Everything else is removed from the client page.':'The system found no defensible service match and will not manufacture one.';
+    var evidence=(els.intel.value||'').trim().split(/\s+/).length;
+    d('d-confidence').textContent=chosen.length?(evidence>25?'High-confidence recommendation':'Working recommendation — add more evidence to strengthen it'):'Zero-result grace applied';
+    if(chosen.length&&!currentProjectId){if(remainingCredits()<=0){note.textContent='All included builds are used. Existing Library projects remain editable.';return;}usage.used=(usage.used||0)+1;currentProjectId='iztic_'+Date.now();localStorage.setItem(USAGE_KEY,JSON.stringify(usage));renderUsage();}
+    d('decision').classList.add('show');lastDecision={show:chosen,hide:hidden,pressure:pressure};updateCanvasState();render();
+    document.querySelectorAll('.step').forEach(function(step){step.open=step.id==='messageStep';});
+  }
+  function save(){
+    try{var m={photo:photoData,decision:lastDecision,projectId:currentProjectId};Object.keys(els).forEach(function(k){m[k]=k==='visible'?Array.from(els.visible.options).filter(function(o){return o.selected;}).map(function(o){return o.value;}):els[k].value;});localStorage.setItem(KEY,JSON.stringify(m));}catch(e){}
+  }
+  function load(){
+    var m=null;try{m=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){}
+    if(!m)m=BLANK;
+    Object.keys(els).forEach(function(k){if(m[k]!=null){if(k==='visible'&&Array.isArray(m[k]))setVisible(m[k]);else els[k].value=m[k];}});
+    lastDecision=m.decision||null;
+    currentProjectId=m.projectId||null;
+    photoData=m.photo||"";
+  }
+  Object.keys(els).forEach(function(k){els[k].addEventListener('input',render);els[k].addEventListener('change',render);});
+  d('pullBrandBtn').addEventListener('click',pullBrand);
+  d('analyzeBtn').addEventListener('click',analyze);
+  d('saveDraftBtn').addEventListener('click',function(){persistProject('Draft');});
+  document.querySelectorAll('.navbtn').forEach(function(btn){btn.addEventListener('click',function(){showView(btn.getAttribute('data-view'));});});
+  d('libraryGrid').addEventListener('click',function(e){var open=e.target.getAttribute('data-open'),duplicate=e.target.getAttribute('data-duplicate');if(open)loadProject(open,false);if(duplicate)loadProject(duplicate,true);});
+  d('captureBtn').addEventListener('click',saveCapture);
+  d('voiceBtn').addEventListener('click',startVoice);
+  d('captureList').addEventListener('click',function(e){var id=e.target.getAttribute('data-use-capture');if(id)useCapture(id);});
+  d('saveGeneratedBtn').addEventListener('click',saveGenerated);
+  d('copyGeneratedBtn').addEventListener('click',function(){var textValue=d('generatedText').value;navigator.clipboard&&navigator.clipboard.writeText(textValue);d('generatedMeta').textContent='Copied · Human review still required';});
+  d('emailGeneratedBtn').addEventListener('click',function(){var subject=generatedDraft?'IZTIC draft · '+(generatedDraft.account||generatedDraft.type):'IZTIC draft';window.location.href='mailto:?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(d('generatedText').value);});
+  d('mobileCapture').addEventListener('click',function(){showView('captureView');d('captureText').focus();});
+  document.querySelectorAll('.modebtn').forEach(function(btn){btn.addEventListener('click',function(){document.querySelectorAll('.modebtn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');d('intel').placeholder=btn.getAttribute('data-mode')==='engine5'?'Paste the verified Engine 5 JSON or account-intelligence summary...':'Paste hiring activity, expansion news, meeting notes, or verified account signals...';});});
+  d('rphoto').addEventListener('change',function(e){
+    var f=e.target.files&&e.target.files[0];if(!f)return;
+    var r=new FileReader();
+    r.onload=function(ev){photoData=ev.target.result;renderPhoto();save();};
+    r.readAsDataURL(f);
+  });
+  d('clearphoto').addEventListener('click',function(){photoData="";d('rphoto').value="";renderPhoto();save();});
+  d('printBtn').addEventListener('click',function(){if(persistProject('Approved'))window.print();});
+  d('resetBtn').addEventListener('click',function(){try{localStorage.removeItem(KEY);}catch(e){}lastDecision=null;currentProjectId=null;Object.keys(els).forEach(function(k){if(k==='visible')setVisible([]);else if(BLANK[k]!=null)els[k].value=BLANK[k];});photoData="";d('rphoto').value="";d('decision').classList.remove('show');document.querySelectorAll('.step').forEach(function(step){step.open=false;});o.brandStatus.textContent='IZTIC colors remain until an output brand is approved.';renderPhoto();updateCanvasState();render();note.textContent='Fresh workspace ready';});
+  document.querySelectorAll('.step').forEach(function(step){step.addEventListener('toggle',function(){if(step.open)document.querySelectorAll('.step').forEach(function(other){if(other!==step)other.open=false;});});});
+  load();renderPhoto();renderUsage();renderLibrary();renderCaptures();updateCanvasState();render();if(lastDecision)d('decision').classList.add('show');
+})();
+</script>

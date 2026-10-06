@@ -1,0 +1,9 @@
+{
+  "name": "iztic",
+  "version": "1.0.0",
+  "private": true,
+  "description": "IZTIC — Raw Intel. Pristine Content. Operated by OLLIN OS.",
+  "scripts": {
+    "start": "npx serve ."
+  }
+}

@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>IZTIC — Operated by OLLIN OS</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap">
 <style>
@@ -230,6 +232,29 @@
     .app{ display:block; max-width:none; margin:0; padding:0; }
     .stage{ display:block; }
     .sheet{ width:8.5in; box-shadow:none; border-radius:0; }
+  }
+
+  /* Mobile */
+  html{ -webkit-text-size-adjust:100%; }
+  img,svg{ max-width:100%; }
+  @media (max-width:860px){
+    body{ overflow-x:hidden; }
+    input,select,textarea{ font-size:16px !important; }
+    .btn,.mini,.navbtn,button{ min-height:44px; }
+    .sheet{ width:100%; }
+    .sh,.sdata,.scap,.sintel,.shum,.sf,.repcard,.sectors{ padding-left:18px; padding-right:18px; }
+    .sg{ grid-template-columns:repeat(2,1fr); }
+    .cg,.cg.personalized{ grid-template-columns:1fr 1fr; }
+    .shum{ grid-template-columns:1fr; }
+    .sf{ flex-wrap:wrap; }
+    .topbar{ padding-left:14px; padding-right:14px; }
+    .mobilefab{ bottom:max(18px,env(safe-area-inset-bottom)); }
+  }
+  @media (max-width:480px){
+    .sg,.cg,.cg.personalized{ grid-template-columns:1fr; }
+    .swatches{ grid-template-columns:repeat(2,1fr); }
+    .viewhead h1{ font-size:30px; }
+    .topnav{ grid-template-columns:repeat(3,1fr); }
   }
 </style>
 
